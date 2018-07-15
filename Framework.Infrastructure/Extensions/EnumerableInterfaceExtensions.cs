@@ -11,12 +11,27 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(action));
             }
 
+            if (source.IsNullOrEmpty())
+            {
+                return source;
+            }
+
             foreach (var item in source)
             {
                 action(item);
             }
 
             return source;
+        }
+
+        public static bool IsNullOrEmpty<TSource>(this IEnumerable<TSource> source)
+        {
+            if (source == null || !source.Any())
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

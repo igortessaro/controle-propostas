@@ -1,4 +1,5 @@
-﻿using Framework.Domain.Core.Repositories;
+﻿using Framework.Domain.Core.Factory;
+using Framework.Domain.Core.Repositories;
 using Framework.Domain.Core.Service;
 using Framework.Infrastructure.Repositories.Relational;
 using Microsoft.AspNetCore.Builder;
@@ -38,6 +39,11 @@ namespace Framework.Aplication.Services
                         .AsImplementedInterfaces()
                         .WithScopedLifetime()
 
+                    .AddClasses(filter => filter.AssignableTo<IFactory>())
+                        .AsImplementedInterfaces()
+                        .AsSelf()
+                        .WithScopedLifetime()
+
                     .AddClasses(filter => filter.AssignableTo<IService>())
                         .AsImplementedInterfaces()
                         .AsSelf()
@@ -55,6 +61,8 @@ namespace Framework.Aplication.Services
                         Version = "v1",
                     }));
 
+
+            services.AddCors();
             services.AddMvc();
         }
 
@@ -65,6 +73,12 @@ namespace Framework.Aplication.Services
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(policy => policy
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials());
 
             app.UseMvc();
 

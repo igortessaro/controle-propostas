@@ -9,6 +9,8 @@ namespace Usuario.Domain.Commands
 
         public string Cpf { get; set; }
 
+        public string Email { get; set; }
+
         public DateTime DataNascimento { get; set; }
 
         public Perfil Perfil { get; set; }

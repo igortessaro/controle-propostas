@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Framework.Domain.Dtos;
 using System.Collections.Generic;
 using Usuario.Domain.Dtos;
 using Usuario.Domain.Repositories;
@@ -15,6 +15,11 @@ namespace Usuario.Infrastructure.Services
             this.UsuarioRepository = usuarioRepository;
         }
 
+        public ResponseDto ExcluirUsuario(string cpf)
+        {
+            return this.UsuarioRepository.Deletar(cpf);
+        }
+
         public UsuarioDto ObterUsuario(string cpf)
         {
             return this.UsuarioRepository.Consultar(cpf);
@@ -25,9 +30,14 @@ namespace Usuario.Infrastructure.Services
             return this.UsuarioRepository.Consultar();
         }
 
-        public void CriarUsuario(UsuarioDto usuario)
+        public ResponseDto CriarUsuario(UsuarioDto usuario)
         {
-            this.UsuarioRepository.Inserir(usuario);
+            return this.UsuarioRepository.Inserir(usuario);
+        }
+
+        public ResponseDto AtualizarUsuario(UsuarioDto usuario)
+        {
+            return this.UsuarioRepository.Atualizar(usuario);
         }
     }
 }

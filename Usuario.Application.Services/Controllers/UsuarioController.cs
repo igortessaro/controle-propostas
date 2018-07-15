@@ -1,7 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using Usuario.Domain.Commands;
 using Usuario.Domain.Dtos;
 using Usuario.Domain.Services;
+using System.Linq;
+using Usuario.Domain.Factories;
+using Usuario.Domain.ValueObjects.Enumerators;
+using System;
+using Framework.Domain.Factories;
+using Framework.Infrastructure.Extensions;
 
 namespace Usuario.Application.Services.Controllers
 {
@@ -11,9 +18,31 @@ namespace Usuario.Application.Services.Controllers
     {
         protected IUsuarioService UsuarioService { get; }
 
-        public UsuarioController(IUsuarioService usuarioService)
+        protected IUsuarioFactory UsuarioFactory { get; }
+
+        protected IListItemFactory ListItemFactory { get; }
+
+        public UsuarioController(
+            IUsuarioService usuarioService,
+            IUsuarioFactory usuarioFactory,
+            IListItemFactory listItemFactory)
         {
             this.UsuarioService = usuarioService;
+            this.UsuarioFactory = usuarioFactory;
+            this.ListItemFactory = listItemFactory;
+        }
+
+        [HttpDelete("{cpf}")]
+        public IActionResult ExcluirUsuario(string cpf)
+        {
+            var response = this.UsuarioService.ExcluirUsuario(cpf);
+
+            if (!response.Success)
+            {
+                return this.BadRequest(response.Error);
+            }
+
+            return this.Ok();
         }
 
         [HttpGet("{cpf}", Name = "ObterUsuarioPorCpf")]
@@ -27,7 +56,7 @@ namespace Usuario.Application.Services.Controllers
         [HttpGet]
         public IActionResult ObterTodosUsuarios()
         {
-            var usuarios = this.UsuarioService.ObterTodosUsuarios();
+            IList<UsuarioDto> usuarios = this.UsuarioService.ObterTodosUsuarios();
 
             return this.Ok(usuarios);
         }
@@ -35,20 +64,63 @@ namespace Usuario.Application.Services.Controllers
         [HttpPost]
         public IActionResult Criar([FromBody]CriarUsuarioCommand usuario)
         {
-            UsuarioDto entity = new UsuarioDto();
+            if (usuario == null)
+            {
+                return this.BadRequest($"{nameof(usuario)} é obrigatório.");
+            }
 
-            entity.Cpf = usuario.Cpf;
-            entity.DataNascimento = usuario.DataNascimento;
-            entity.Nome = usuario.Nome;
-            entity.Perfil = usuario.Perfil;
+            UsuarioDto entity = this.UsuarioFactory.CriarDto(usuario.Cpf, usuario.DataNascimento, usuario.Nome, usuario.Perfil, usuario.Email);
 
-            this.UsuarioService.CriarUsuario(entity);
+            var response = this.UsuarioService.CriarUsuario(entity);
 
-            var usuarioCriado = this.UsuarioService.ObterUsuario(usuario.Cpf);
+            if (!response.Success)
+            {
+                return this.BadRequest(response.Error);
+            }
 
             var result = this.CreatedAtRoute(routeName: "ObterUsuarioPorCpf", routeValues: new { cpf = entity.Cpf }, value: entity);
 
             return result;
+        }
+
+        [HttpPut("{cpf}")]
+        public IActionResult Atualizar([FromBody]CriarUsuarioCommand usuario, string cpf)
+        {
+            if (usuario == null)
+            {
+                return this.BadRequest($"{nameof(usuario)} é obrigatório.");
+            }
+
+            UsuarioDto entity = this.UsuarioFactory.CriarDto(cpf, usuario.DataNascimento, usuario.Nome, usuario.Perfil, usuario.Email);
+
+            var response = this.UsuarioService.AtualizarUsuario(entity);
+
+            if (!response.Success)
+            {
+                return this.BadRequest(response.Error);
+            }
+
+            return this.Ok(usuario);
+        }
+
+        [HttpGet("perfis")]
+        public IActionResult ObterPerfis()
+        {
+            var result = Enum.GetValues(typeof(Perfil))
+                .Cast<Perfil>()
+                .Select(x => this.ListItemFactory.Create((int)x, x.Description()))
+                .ToList();
+
+            return this.Ok(result);
+        }
+
+        // TODO: Remover - método criado apenas para facilitar testes.
+        [HttpPost("postAll")]
+        public IActionResult CriarVarios([FromBody]CriarUsuarioCommand[] usuarios)
+        {
+            usuarios.ForEach(u => this.Criar(u));
+
+            return this.Ok();
         }
     }
 }
