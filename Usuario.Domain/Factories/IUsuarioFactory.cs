@@ -11,6 +11,6 @@ namespace Usuario.Domain.Factories
 
         UsuarioDto CriarDto(Entity.Usuario source);
 
-        UsuarioDto CriarDto(string cpf, DateTime dataNascimento, string nome, Perfil perfil, string email);
+        UsuarioDto CriarDto(string cpf, DateTime dataNascimento, string nome, Perfil perfil, string email, string chaveAcesso);
     }
 }

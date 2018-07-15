@@ -40,7 +40,7 @@ namespace Usuario.Infrastructure.Repositories.Relational
                 return this.ResponseFactory.Fail($"Nenhum usuário encontrado para o CPF:{usuario.Cpf}.");
             }
 
-            entity.PopularDados(usuario.Nome, usuario.Cpf, usuario.Email, usuario.DataNascimento, usuario.Perfil);
+            entity.PopularDados(usuario.Nome, usuario.Cpf, usuario.Email, usuario.DataNascimento, usuario.Perfil, usuario.ChaveAcesso);
 
             this.Update(entity);
 
@@ -68,9 +68,21 @@ namespace Usuario.Infrastructure.Repositories.Relational
             return entityList;
         }
 
-        public UsuarioDto Consultar(string cpf)
+        public UsuarioDto ConsultarPorCpf(string cpf)
         {
             var entity = this.Query().Where(u => u.Cpf.Equals(cpf)).FirstOrDefault();
+
+            if (entity == null)
+            {
+                return null;
+            }
+
+            return this.UsuarioFactory.CriarDto(entity);
+        }
+
+        public UsuarioDto ConsultarPorEmail(string email)
+        {
+            var entity = this.Query().Where(u => u.Email.Equals(email)).FirstOrDefault();
 
             if (entity == null)
             {

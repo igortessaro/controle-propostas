@@ -14,5 +14,7 @@ namespace Usuario.Domain.Commands
         public DateTime DataNascimento { get; set; }
 
         public Perfil Perfil { get; set; }
+
+        public string ChaveAcesso { get; set; }
     }
 }

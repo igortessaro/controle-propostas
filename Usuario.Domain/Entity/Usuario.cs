@@ -18,13 +18,24 @@ namespace Usuario.Domain.Entity
 
         public Perfil Perfil { get; private set; }
 
-        public void PopularDados(string nome, string cpf, string email, DateTime dataNascimento, Perfil perfil)
+        public void PopularDados(string nome, string cpf, string email, DateTime dataNascimento, Perfil perfil, string chaveAcesso)
         {
             this.Nome = nome;
-            this.Cpf = cpf;
+            this.Cpf = this.RemoverCaracteresEspeciais(cpf);
             this.Email = email;
             this.DataNascimento = dataNascimento;
             this.Perfil = perfil;
+            this.ChaveAcesso = chaveAcesso;
+        }
+
+        private string RemoverCaracteresEspeciais(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return value;
+            }
+
+            return value.Replace("-", string.Empty).Replace(".", string.Empty);
         }
     }
 }

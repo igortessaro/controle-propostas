@@ -20,9 +20,14 @@ namespace Usuario.Infrastructure.Services
             return this.UsuarioRepository.Deletar(cpf);
         }
 
-        public UsuarioDto ObterUsuario(string cpf)
+        public UsuarioDto ObterUsuarioPorCpf(string cpf)
         {
-            return this.UsuarioRepository.Consultar(cpf);
+            return this.UsuarioRepository.ConsultarPorCpf(cpf);
+        }
+
+        public UsuarioDto ObterUsuarioPorEmail(string email)
+        {
+            return this.UsuarioRepository.ConsultarPorEmail(email);
         }
 
         public IList<UsuarioDto> ObterTodosUsuarios()

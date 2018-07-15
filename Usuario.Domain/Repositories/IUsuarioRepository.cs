@@ -7,7 +7,9 @@ namespace Usuario.Domain.Repositories
 {
     public interface IUsuarioRepository : IRepository
     {
-        UsuarioDto Consultar(string cpf);
+        UsuarioDto ConsultarPorCpf(string cpf);
+
+        UsuarioDto ConsultarPorEmail(string email);
 
         IList<UsuarioDto> Consultar();
 

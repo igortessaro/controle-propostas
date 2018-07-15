@@ -15,14 +15,14 @@ namespace Usuario.Infrastructure.Factories
                 return null;
             }
 
-            UsuarioDto result = this.CriarDto(source.Cpf, source.DataNascimento, source.Nome, source.Perfil, source.Email);
+            UsuarioDto result = this.CriarDto(source.Cpf, source.DataNascimento, source.Nome, source.Perfil, source.Email, source.ChaveAcesso);
 
             return result;
         }
 
-        public UsuarioDto CriarDto(string cpf, DateTime dataNascimento, string nome, Perfil perfil, string email)
+        public UsuarioDto CriarDto(string cpf, DateTime dataNascimento, string nome, Perfil perfil, string email, string chaveAcesso)
         {
-            UsuarioDto result = new UsuarioDto(cpf, dataNascimento, nome, perfil, email);
+            UsuarioDto result = new UsuarioDto(cpf, dataNascimento, nome, perfil, email, chaveAcesso);
 
             return result;
         }
@@ -36,7 +36,7 @@ namespace Usuario.Infrastructure.Factories
 
             Usuario.Domain.Entity.Usuario result = new Domain.Entity.Usuario();
 
-            result.PopularDados(source.Nome, source.Cpf, source.Email, source.DataNascimento, source.Perfil);
+            result.PopularDados(source.Nome, source.Cpf, source.Email, source.DataNascimento, source.Perfil, source.ChaveAcesso);
 
             return result;
         }

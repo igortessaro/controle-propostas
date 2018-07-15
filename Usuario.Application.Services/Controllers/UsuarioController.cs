@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Framework.Domain.Factories;
+using Framework.Infrastructure.Extensions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Usuario.Domain.Commands;
 using Usuario.Domain.Dtos;
-using Usuario.Domain.Services;
-using System.Linq;
 using Usuario.Domain.Factories;
+using Usuario.Domain.Services;
 using Usuario.Domain.ValueObjects.Enumerators;
-using System;
-using Framework.Domain.Factories;
-using Framework.Infrastructure.Extensions;
 
 namespace Usuario.Application.Services.Controllers
 {
@@ -32,6 +33,7 @@ namespace Usuario.Application.Services.Controllers
             this.ListItemFactory = listItemFactory;
         }
 
+        [Authorize("Bearer")]
         [HttpDelete("{cpf}")]
         public IActionResult ExcluirUsuario(string cpf)
         {
@@ -45,14 +47,16 @@ namespace Usuario.Application.Services.Controllers
             return this.Ok();
         }
 
+        [Authorize("Bearer")]
         [HttpGet("{cpf}", Name = "ObterUsuarioPorCpf")]
         public IActionResult ObterUsuario(string cpf)
         {
-            var usuario = this.UsuarioService.ObterUsuario(cpf);
+            var usuario = this.UsuarioService.ObterUsuarioPorCpf(cpf);
 
             return this.Ok(usuario);
         }
 
+        [Authorize("Bearer")]
         [HttpGet]
         public IActionResult ObterTodosUsuarios()
         {
@@ -61,6 +65,7 @@ namespace Usuario.Application.Services.Controllers
             return this.Ok(usuarios);
         }
 
+        [Authorize("Bearer")]
         [HttpPost]
         public IActionResult Criar([FromBody]CriarUsuarioCommand usuario)
         {
@@ -69,7 +74,7 @@ namespace Usuario.Application.Services.Controllers
                 return this.BadRequest($"{nameof(usuario)} é obrigatório.");
             }
 
-            UsuarioDto entity = this.UsuarioFactory.CriarDto(usuario.Cpf, usuario.DataNascimento, usuario.Nome, usuario.Perfil, usuario.Email);
+            UsuarioDto entity = this.UsuarioFactory.CriarDto(usuario.Cpf, usuario.DataNascimento, usuario.Nome, usuario.Perfil, usuario.Email, usuario.ChaveAcesso);
 
             var response = this.UsuarioService.CriarUsuario(entity);
 
@@ -83,6 +88,7 @@ namespace Usuario.Application.Services.Controllers
             return result;
         }
 
+        [Authorize("Bearer")]
         [HttpPut("{cpf}")]
         public IActionResult Atualizar([FromBody]CriarUsuarioCommand usuario, string cpf)
         {
@@ -91,7 +97,7 @@ namespace Usuario.Application.Services.Controllers
                 return this.BadRequest($"{nameof(usuario)} é obrigatório.");
             }
 
-            UsuarioDto entity = this.UsuarioFactory.CriarDto(cpf, usuario.DataNascimento, usuario.Nome, usuario.Perfil, usuario.Email);
+            UsuarioDto entity = this.UsuarioFactory.CriarDto(cpf, usuario.DataNascimento, usuario.Nome, usuario.Perfil, usuario.Email, usuario.ChaveAcesso);
 
             var response = this.UsuarioService.AtualizarUsuario(entity);
 
@@ -103,6 +109,7 @@ namespace Usuario.Application.Services.Controllers
             return this.Ok(usuario);
         }
 
+        [Authorize("Bearer")]
         [HttpGet("perfis")]
         public IActionResult ObterPerfis()
         {
@@ -112,15 +119,6 @@ namespace Usuario.Application.Services.Controllers
                 .ToList();
 
             return this.Ok(result);
-        }
-
-        // TODO: Remover - método criado apenas para facilitar testes.
-        [HttpPost("postAll")]
-        public IActionResult CriarVarios([FromBody]CriarUsuarioCommand[] usuarios)
-        {
-            usuarios.ForEach(u => this.Criar(u));
-
-            return this.Ok();
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Usuario.Domain.Dtos
         {
         }
 
-        public UsuarioDto(string cpf, DateTime dataNascimento, string nome, Perfil perfil, string email)
+        public UsuarioDto(string cpf, DateTime dataNascimento, string nome, Perfil perfil, string email, string chaveAcesso)
             : this()
         {
             this.Cpf = cpf;
@@ -18,6 +18,7 @@ namespace Usuario.Domain.Dtos
             this.Nome = nome;
             this.Perfil = perfil;
             this.Email = email;
+            this.ChaveAcesso = chaveAcesso;
         }
 
         public string Nome { get; set; }
@@ -31,6 +32,8 @@ namespace Usuario.Domain.Dtos
         public Perfil Perfil { get; set; }
 
         public string PerfilDescricao { get { return this.Perfil.Description(); } }
+
+        public string ChaveAcesso { get; set; }
 
         public override string ToString()
         {

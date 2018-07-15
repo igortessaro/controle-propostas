@@ -11,7 +11,9 @@ namespace Usuario.Domain.Services
 
         ResponseDto ExcluirUsuario(string cpf);
 
-        UsuarioDto ObterUsuario(string cpf);
+        UsuarioDto ObterUsuarioPorCpf(string cpf);
+
+        UsuarioDto ObterUsuarioPorEmail(string email);
 
         IList<UsuarioDto> ObterTodosUsuarios();
 

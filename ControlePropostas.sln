@@ -25,7 +25,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proposta.Domain", "Proposta
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proposta.Infrastructure", "Proposta.Infrastructure\Proposta.Infrastructure.csproj", "{BA358909-0E2D-4E74-9C29-30D118617731}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.Aplication.Services", "Framework.Aplication.Services\Framework.Aplication.Services.csproj", "{E40718E5-6B5A-4DA4-8B17-A97AB12B02B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Aplication.Services", "Framework.Aplication.Services\Framework.Aplication.Services.csproj", "{E40718E5-6B5A-4DA4-8B17-A97AB12B02B1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "100.DataBase", "100.DataBase", "{6B317239-EB06-4CDB-AC44-5237F9A95CF5}"
+	ProjectSection(SolutionItems) = preProject
+		010_CREATE_DATABASE_ControlePropostasDb.sql = 010_CREATE_DATABASE_ControlePropostasDb.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rollback", "Rollback", "{FB6B01F6-57A1-49D8-A8FB-329181EBE28A}"
+	ProjectSection(SolutionItems) = preProject
+		010_DROP_DATABASE_ControlePropostasDb_Rollback.sql = 010_DROP_DATABASE_ControlePropostasDb_Rollback.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +93,7 @@ Global
 		{531AF9EA-CCA3-468B-92D1-E33D6908EBB7} = {35EC7F1D-9167-4082-A88B-8F335BE620A1}
 		{BA358909-0E2D-4E74-9C29-30D118617731} = {35EC7F1D-9167-4082-A88B-8F335BE620A1}
 		{E40718E5-6B5A-4DA4-8B17-A97AB12B02B1} = {C948304C-41D9-4867-B65D-B432451E7616}
+		{FB6B01F6-57A1-49D8-A8FB-329181EBE28A} = {6B317239-EB06-4CDB-AC44-5237F9A95CF5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DFF6A3D8-69C9-4CC1-BE4B-1889301ECBE2}
